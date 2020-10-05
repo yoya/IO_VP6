@@ -45,13 +45,13 @@ class IO_VP6 {
             $disp_cols = $bit->getUI8();
             echo "rows:$rows cols:$cols disp_rows:$disp_rows disp_cols:$disp_cols\n";
             if (($rows === 0) || ($cols === 0)) {
-                fprintf(stderr, "(rows:$rows === 0) || (cols:$cols === 0)\n");
+                fprintf(STDERR, "(rows:$rows === 0) || (cols:$cols === 0)\n");
                 return ;
             }
             $code_word = $bit->getUIBits(24);
             printf("range_decoder code_word:0x%06x\n", $code_word);
         } else {
-            fprintf(stderr, "not implemented yet.\n");
+            fprintf(STDERR, "not implemented yet.\n");
             return ;
         }
     }
