@@ -19,17 +19,17 @@ class IO_VP6 {
         $this->_vp6Data = $vp6Data;
         $bit = new IO_Bit();
         $bit->input($vp6Data);
-        $keyframe        = 1 - $bit->getUIBit();
+        $frameType       = $bit->getUIBit();
         $quantizer       = $bit->getUIBits(6);
         $separated_coeff = $bit->getUIBit();
-        echo "keyframe:$keyframe quantizer:$quantizer separated_coeff:$separated_coeff\n";
-        if ($keyframe) {
-            $sub_version = $bit->getUIBits(5);
+        echo "frameType:$frameType quantizer:$quantizer separated_coeff:$separated_coeff\n";
+        if ($frameType == 0) {  // key frame
+            $sub_version = $bit->getUIBits(5);  // format
             if ($sub_version > 8) {
                 fprintf(stderr, "sub_version:$sub_version > 8.\n");
                 return ;
             }
-            $filter_header = $bit->getUIBits(2);
+            $filter_header = $bit->getUIBits(2);  // profile
             $interlace = $bit->getUIBit();
             if ($interlace) {
                 fprintf(stderr, "interlace no support\n");
@@ -40,8 +40,8 @@ class IO_VP6 {
                 $coeff_offset = $bit->getUI16BE() - 2;
                 echo "coeff_offset:$coeff_offset\n";
             }
-            $rows = $bit->getUI8();
-            $cols = $bit->getUI8();
+            $rows = $bit->getUI8();  // vfrags
+            $cols = $bit->getUI8();  // hfrags
             $disp_rows = $bit->getUI8();
             $disp_cols = $bit->getUI8();
             echo "rows:$rows cols:$cols disp_rows:$disp_rows disp_cols:$disp_cols\n";
@@ -55,7 +55,7 @@ class IO_VP6 {
         }
     }
     function dump($opts = array()) {
-        
+        ;
     }
     function build($opts = array()) {
         fprintf(STDERR, "build: not implemented yet.");
