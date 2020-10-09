@@ -9,6 +9,7 @@ if (is_readable('vendor/autoload.php')) {
     require 'vendor/autoload.php';
 } else {
     require_once 'IO/Bit.php';
+    require_once 'IO/VP6/RangeCoder.php';
 }
 
 
@@ -48,11 +49,9 @@ class IO_VP6 {
                 fprintf(STDERR, "(rows:$rows === 0) || (cols:$cols === 0)\n");
                 return ;
             }
-            $code_word = $bit->getUIBits(24);
-            printf("range_decoder code_word:0x%06x\n", $code_word);
-        } else {
-            fprintf(STDERR, "not implemented yet.\n");
-            return ;
+            $rangeCoder = new IO_VP6_RangeCoder();
+            $code_word = $rangeCoder->input($bit);
+            printf("range_decoder (code_word:0x%06x)\n", $code_word);
         }
     }
     function dump($opts = array()) {
